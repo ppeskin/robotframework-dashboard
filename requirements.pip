@@ -1,3 +1,6 @@
 flask
 flask-debugtoolbar
 gunicorn
+robotframework
+rpaframework
+robotframework-sshlibrary

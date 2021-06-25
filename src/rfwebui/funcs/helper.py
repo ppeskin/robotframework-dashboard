@@ -2,12 +2,14 @@ import configparser
 import os
 
 
-SETTINGS_FILE_PATH = "../app_configs/settings.ini"
+# SETTINGS_FILE_PATH = "../app_configs/settings.ini"
+SETTINGS_FILE_PATH = os.path.join(os.getcwd(), 'configs', 'settings.ini')
 
 
 def ConfigSectionMap(section):
     Config = configparser.ConfigParser()
-    config_file = os.path.join(os.path.dirname(__file__), SETTINGS_FILE_PATH)
+    # config_file = os.path.join(os.path.dirname(__file__), SETTINGS_FILE_PATH)
+    config_file = SETTINGS_FILE_PATH
     Config.read(config_file)
 
     dict1 = {}
@@ -16,7 +18,8 @@ def ConfigSectionMap(section):
         try:
             dict1[option] = Config.get(section, option)
             if dict1[option] == -1:
-                DebugPrint("skip: %s" % option)
+                # DebugPrint("skip: %s" % option)
+                print("skip: %s" % option)
         except:
             print("exception on %s!" % option)
             dict1[option] = None
@@ -26,7 +29,8 @@ def ConfigSectionMap(section):
 def read_settings():
     working_dir = ""
 
-    if os.path.isfile(os.path.dirname(os.path.abspath(__file__)) + "/" + SETTINGS_FILE_PATH):
+    # if os.path.isfile(os.path.dirname(os.path.abspath(__file__)) + "/" + SETTINGS_FILE_PATH):
+    if os.path.isfile(SETTINGS_FILE_PATH):
         working_dir = ConfigSectionMap("FILES")['path']
 
     settings_dict = {"test_file_dir": working_dir}
@@ -36,8 +40,10 @@ def read_settings():
 
 def save_settings(dir_path):
     config = configparser.ConfigParser()
-    if not dir_path.endswith('/'):
-        dir_path += '/'
+    # if not dir_path.endswith('/'):
+    #     dir_path += '/'
+    dir_path = os.path.normpath(dir_path)
     config['FILES'] = {'Path': dir_path}
-    with open(os.path.join(os.path.dirname(__file__), SETTINGS_FILE_PATH), 'w+') as configfile:
+    # with open(os.path.join(os.path.dirname(__file__), SETTINGS_FILE_PATH), 'w+') as configfile:
+    with open(SETTINGS_FILE_PATH, 'w+') as configfile:
         config.write(configfile)
